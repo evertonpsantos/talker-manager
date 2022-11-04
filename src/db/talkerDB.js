@@ -9,4 +9,10 @@ const readJson = async () => {
   return convertedJson;
 };
 
-module.exports = { readJson };
+const getById = async (id) => {
+  const talkers = await readJson();
+  const talkerById = talkers.find((talker) => talker.id === Number(id));
+  return talkerById;
+};
+
+module.exports = { readJson, getById };
