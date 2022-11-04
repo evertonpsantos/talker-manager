@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const { readJson } = require('./db/talkerDB');
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,8 +13,14 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker', async (_req, res) => {
+  const talkers = await readJson();
+  if (talkers) {
+    return res.status(200).json(talkers);
+  } 
+    return res.status(400).json([]);
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
-
-// VQV!!
