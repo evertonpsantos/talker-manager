@@ -32,4 +32,11 @@ const updateTalker = async (id, newInfo) => {
   return talkerList[talkerToUpdate];
 };
 
-module.exports = { readJson, getById, registerNewTalker, updateTalker };
+const deleteTalker = async (id) => {
+  const talkerList = await readJson();
+  const filteredList = talkerList.filter((talker) => talker.id !== Number(id));
+  await fs.writeFile(jsonPath, JSON.stringify(filteredList));
+  return filteredList;
+};
+
+module.exports = { readJson, getById, registerNewTalker, updateTalker, deleteTalker };
