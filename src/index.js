@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readJson, getById, registerNewTalker } = require('./db/talkerDB');
+const { readJson, getById, registerNewTalker, updateTalker } = require('./db/talkerDB');
 const { getNewToken, validateEmail, validatePassword, validateToken, 
   validateName, validateAge, validateTalk, 
   validateWatchedAt, validateRate } = require('./utils/utils');
@@ -48,6 +48,20 @@ app.post('/talker',
   const newTalker = req.body;
   const newRegisteredTalker = await registerNewTalker(newTalker);
   res.status(201).json(newRegisteredTalker);
+});
+
+app.put('/talker/:id', 
+  validateToken, 
+  validateName, 
+  validateAge, 
+  validateTalk, 
+  validateWatchedAt, 
+  validateRate, 
+  async (req, res) => {
+    const paramsId = req.params.id;
+    const newInfo = req.body;
+    const updatedTalker = await updateTalker(paramsId, newInfo);
+  res.status(200).json(updatedTalker);
 });
 
 app.listen(PORT, () => {
