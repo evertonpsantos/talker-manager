@@ -15,4 +15,13 @@ const getById = async (id) => {
   return talkerById;
 };
 
-module.exports = { readJson, getById };
+const registerNewTalker = async (newTalker) => {
+  const talkerList = await readJson();
+  const newId = talkerList[talkerList.length - 1].id + 1;
+  const newObj = { id: newId, ...newTalker };
+  talkerList.push(newObj);
+  await fs.writeFile(jsonPath, JSON.stringify(talkerList));
+  return newObj;
+};
+
+module.exports = { readJson, getById, registerNewTalker };
