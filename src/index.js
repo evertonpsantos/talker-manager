@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readJson, getById, registerNewTalker, updateTalker, deleteTalker } = require('./db/talkerDB');
+const { readJson, getById, registerNewTalker, 
+  updateTalker, deleteTalker } = require('./db/talkerDB');
 const { getNewToken, validateEmail, validatePassword, validateToken, 
   validateName, validateAge, validateTalk, 
   validateWatchedAt, validateRate } = require('./utils/utils');
@@ -14,6 +15,17 @@ const PORT = '3000';
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
+});
+
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readJson();
+  if (!q) {
+    return res.status(200).json(talkers);
+  }
+  const talkerFound = talkers.filter(({ name }) => name.includes(q));
+  if (talkerFound) return res.status(200).json(talkerFound);
+  return res.status(200).json([]);
 });
 
 app.get('/talker', async (_req, res) => {
